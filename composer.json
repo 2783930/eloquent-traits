@@ -1,0 +1,23 @@
+{
+    "name": "2783930/eloquent-traits",
+    "description": "Laravel Eloquent traits package",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "EloquentTraits\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Majid Alizadeh",
+            "email": "majid.alizadeh22@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "illuminate/database": "^7|^8|^9",
+        "illuminate/support": "^7|^8|^9",
+        "cviebrock/eloquent-sluggable": "^7|^8|^9"
+    }
+}
