@@ -6,16 +6,21 @@ use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @method static Builder|\Illuminate\Database\Query\Builder withDeactivated(bool $withDeactivated = true)
+ * @method static Builder|\Illuminate\Database\Query\Builder onlyDeactivated()
  */
 trait Activable
 {
-    #region Boot
-
+    /**
+     * @return void
+     */
     public static function bootActivable(): void
     {
         static::addGlobalScope(new ActivatingScope);
     }
 
+    /**
+     * @return void
+     */
     public function initializeActivable(): void
     {
         if (!isset($this->casts[$this->getIsActiveColumn()])) {
@@ -27,52 +32,46 @@ trait Activable
         }
     }
 
-    #endregion
-
-    #region Helpers
-
-    public function markAsActivated(): void
+    /**
+     * @return static
+     */
+    public function markAsActivated(): static
     {
         $this->{$this->getIsActiveColumn()} = true;
-        $this->save();
+        return $this;
     }
 
-    public function markAsNotActivated(): void
+    /**
+     * @return static
+     */
+    public function markAsNotActivated(): static
     {
         $this->{$this->getIsActiveColumn()} = false;
-        $this->save();
+        return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function activated(): bool
     {
         return !is_null($this->{$this->getIsActiveColumn()});
     }
 
+    /**
+     * @return string
+     */
     public function getIsActiveColumn(): string
     {
         /** @noinspection PhpUndefinedClassConstantInspection */
-        return defined(static::class . '::IS_ACTIVE') ? static::IS_ACTIVE : 'isActive';
+        return defined(static::class . '::IS_ACTIVE') ? static::IS_ACTIVE : 'is_active';
     }
 
+    /**
+     * @return string
+     */
     public function getQualifiedIsActiveColumn(): string
     {
         return $this->qualifyColumn($this->getIsActiveColumn());
     }
-
-    #endregion
-
-    #region Scopes
-
-    public function scopeActivated(Builder $builder): Builder
-    {
-        return $builder->where($this->getIsActiveColumn(), true);
-    }
-
-    public function scopeNotActivated(Builder $builder): Builder
-    {
-        return $builder->whereNull($this->getIsActiveColumn())
-                       ->orWhere($this->getIsActiveColumn(), false);
-    }
-
-    #endregion
 }

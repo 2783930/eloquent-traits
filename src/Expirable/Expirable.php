@@ -7,16 +7,21 @@ use Illuminate\Database\Eloquent\Builder;
 
 /**
  * @method static Builder|\Illuminate\Database\Query\Builder withExpired(bool $withExpired = true)
+ * @method static Builder|\Illuminate\Database\Query\Builder onlyExpired()
  */
 trait Expirable
 {
-    #region Boot
-
+    /**
+     * @return void
+     */
     public static function bootExpirable(): void
     {
         static::addGlobalScope(new ExpiringScope);
     }
 
+    /**
+     * @return void
+     */
     public function initializeExpirable(): void
     {
         if (!isset($this->casts[$this->getExpiredAtColumn()])) {
@@ -28,60 +33,53 @@ trait Expirable
         }
     }
 
-    #endregion
-
-    #region Helpers
-
-    public function markAsExpired(): void
+    /**
+     * @return static
+     */
+    public function markAsExpired(): static
     {
         $this->{$this->getExpiredAtColumn()} = Carbon::now();
-        $this->save();
+        return $this;
     }
 
-    public function markAsNotExpired(): void
+    /**
+     * @return static
+     */
+    public function markAsNotExpired(): static
     {
         $this->{$this->getExpiredAtColumn()} = null;
-        $this->save();
+        return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function expired(): bool
     {
-        return !is_null($this->{$this->getExpiredAtColumn()});
+        return $this->{$this->getExpiredAtColumn()}?->isPast();
     }
 
+    /**
+     * @return string
+     */
     public function getExpiredAtColumn(): string
     {
-        return defined(static::class . '::EXPIRED_AT') ? static::EXPIRED_AT : 'expiredAt';
+        return defined(static::class . '::EXPIRED_AT') ? static::EXPIRED_AT : 'expired_at';
     }
 
+    /**
+     * @return string
+     */
     public function getQualifiedExpiredAtColumn(): string
     {
         return $this->qualifyColumn($this->getExpiredAtColumn());
     }
 
-    #endregion
-
-    #region Virtual Attributes
-
+    /**
+     * @return bool
+     */
     public function getIsExpiredAttribute(): bool
     {
-        return !is_null($this->{$this->getExpiredAtColumn()});
+        return $this->{$this->getExpiredAtColumn()}?->isPast();
     }
-
-    #endregion
-
-    #region Scopes
-
-    public function scopeExpired(Builder $builder): Builder
-    {
-        return $builder->whereNotNull($this->getExpiredAtColumn());
-    }
-
-    public function scopeNotExpired(Builder $builder): Builder
-    {
-        return $builder->whereNull($this->getExpiredAtColumn())
-                       ->orWhere($this->getExpiredAtColumn(), '>', Carbon::now());
-    }
-
-    #endregion
 }

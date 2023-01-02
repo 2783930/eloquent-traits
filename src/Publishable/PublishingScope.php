@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Scope;
 
 class PublishingScope implements Scope
 {
-    protected array $extensions = ['WithUnpublished',];
+    protected array $extensions = ['WithUnpublished', 'OnlyUnpublished'];
 
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -52,6 +52,22 @@ class PublishingScope implements Scope
             }
 
             return $builder->withoutGlobalScope($this);
+        });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return void
+     */
+    protected function addOnlyUnpublished(Builder $builder): void
+    {
+        $builder->macro('onlyUnpublished', function (Builder $builder) {
+            return $builder->where(function (Builder $builder) {
+                $publishedAt = $builder->getModel()->getQualifiedPublishedAtColumn();
+                $builder
+                    ->whereNull($publishedAt)
+                    ->orWhere($publishedAt, '<', Carbon::now());
+            });
         });
     }
 

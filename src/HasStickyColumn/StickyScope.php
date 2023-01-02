@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Scope;
 
 class StickyScope implements Scope
 {
-    protected array $extensions = ['OrderBySticky', 'WithoutSticky', 'OnlySticky'];
+    protected array $extensions = ['OrderBySticky', 'OnlySticky', 'OnlyNotSticky'];
 
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -34,28 +34,18 @@ class StickyScope implements Scope
     }
 
     /**
-     * @param Builder $builder
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param string|false                          $direction
      * @return void
      */
-    protected function addOrderBySticky(Builder $builder): void
+    protected function addOrderBySticky(Builder $builder, string|false $direction = 'desc'): void
     {
-        $builder->macro('orderBySticky', function (Builder $builder, $withoutSticky = false) {
-            if ($withoutSticky) {
+        $builder->macro('orderBySticky', function (Builder $builder) use ($direction) {
+            if (!$direction) {
                 return $builder->withoutGlobalScope($this);
             }
 
-            return $builder->orderByDesc($builder->getModel()->getIsStickyColumn());
-        });
-    }
-
-    /**
-     * @param Builder $builder
-     * @return void
-     */
-    protected function addWithoutSticky(Builder $builder): void
-    {
-        $builder->macro('withoutSticky', function (Builder $builder) {
-            return $builder->where($builder->getModel()->getIsStickyColumn(), false);
+            return $builder->orderBy($builder->getModel()->getIsStickyColumn(), $direction);
         });
     }
 
@@ -70,4 +60,14 @@ class StickyScope implements Scope
         });
     }
 
+    /**
+     * @param Builder $builder
+     * @return void
+     */
+    protected function addOnlyNotSticky(Builder $builder): void
+    {
+        $builder->macro('onlyNotSticky', function (Builder $builder) {
+            return $builder->where($builder->getModel()->getIsStickyColumn(), false);
+        });
+    }
 }

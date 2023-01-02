@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Scope;
 
 class ActivatingScope implements Scope
 {
-    protected array $extensions = ['WithDeactivated'];
+    protected array $extensions = ['WithDeactivated', 'OnlyDeactivated'];
 
     /**
      * Apply the scope to a given Eloquent query builder.
      *
      * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @param \Illuminate\Database\Eloquent\Model   $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @return void
      */
     public function apply(Builder $builder, Model $model): void
@@ -46,10 +46,20 @@ class ActivatingScope implements Scope
                 return $builder->withoutGlobalScope($this);
             }
 
-            return $builder->where(function ($query) use ($builder) {
-                $query->where($builder->getModel()->getIsActiveColumn(), true);
-            });
+            return $builder;
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected function addOnlyDeactivated(Builder $builder): Builder
+    {
+        return $builder->where(
+            $builder->getModel()->getQualifiedIsActiveColumn(),
+            false
+        );
     }
 
 }

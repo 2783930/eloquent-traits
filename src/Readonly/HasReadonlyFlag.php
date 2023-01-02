@@ -4,13 +4,15 @@ namespace EloquentTraits\Readonly;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @method static Builder|\Illuminate\Database\Query\Builder onlyReadonly()
+ * @method static Builder|\Illuminate\Database\Query\Builder onlyNotReadonly()
+ */
 trait HasReadonlyFlag
 {
-    #region Boot
-
     public static function bootHasReadonlyFlag(): void
     {
-        //
+        static::addGlobalScope(ReadOnlyScope::class);
     }
 
     public function initializeHasReadonlyFlag(): void
@@ -19,10 +21,6 @@ trait HasReadonlyFlag
             $this->casts[$this->getReadonlyColumn()] = 'boolean';
         }
     }
-
-    #endregion
-
-    #region Helpers
 
     public function getReadonlyColumn(): string
     {
@@ -33,10 +31,6 @@ trait HasReadonlyFlag
     {
         return $this->qualifyColumn($this->getReadonlyColumn());
     }
-
-    #endregion
-
-    #region Scopes
 
     public function scopeWithReadonly(Builder $builder, $withReadonly = true)
     {
@@ -55,5 +49,4 @@ trait HasReadonlyFlag
         return $builder->where($this->getReadonlyColumn(), false);
     }
 
-    #endregion
 }

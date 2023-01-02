@@ -6,12 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * @method static Builder|\Illuminate\Database\Query\Builder withUnpublished(bool $withPublished = true)
+ * @method static Builder|\Illuminate\Database\Query\Builder withUnpublished(bool $withUnpublished = true)
+ * @method static Builder|\Illuminate\Database\Query\Builder onlyUnpublished()
  */
 trait Publishable
 {
-    #region Boot
-
     public static function bootPublishable(): void
     {
         static::addGlobalScope(new PublishingScope);
@@ -27,10 +26,6 @@ trait Publishable
             $this->fillable[] = $this->getPublishedAtColumn();
         }
     }
-
-    #endregion
-
-    #region Helpers
 
     public function publish(): void
     {
@@ -59,29 +54,8 @@ trait Publishable
         return $this->qualifyColumn($this->getPublishedAtColumn());
     }
 
-    #endregion
-
-    #region Virtual Attributes
-
     public function getIsPublishedAttribute(): bool
     {
-        return !is_null($this->{$this->getPublishedAtColumn()});
+        return (bool)$this->{$this->getPublishedAtColumn()}?->isFuture();
     }
-
-    #endregion
-
-    #region Scopes
-
-    public function scopePublished(Builder $builder): Builder
-    {
-        return $builder->whereNotNull($this->getPublishedAtColumn());
-    }
-
-    public function scopeNotPublished(Builder $builder): Builder
-    {
-        return $builder->whereNull($this->getPublishedAtColumn())
-                       ->orWhere($this->getPublishedAtColumn(), '>', Carbon::now());
-    }
-
-    #endregion
 }

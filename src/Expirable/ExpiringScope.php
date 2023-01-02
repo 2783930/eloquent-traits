@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Scope;
 
 class ExpiringScope implements Scope
 {
-    protected array $extensions = ['WithExpired'];
+    protected array $extensions = ['WithExpired', 'OnlyExpired'];
 
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -50,6 +50,17 @@ class ExpiringScope implements Scope
             }
 
             return $builder->withoutGlobalScope($this);
+        });
+    }
+
+    protected function addOnlyExpired(Builder $builder): void
+    {
+        $builder->macro('onlyExpired', function (Builder $builder) {
+            return $builder->where(function (Builder $builder) {
+                $column = $builder->getModel()->getQualifiedExpiredAtColumn();
+
+                $builder->where($column, '>', Carbon::now());
+            });
         });
     }
 }
