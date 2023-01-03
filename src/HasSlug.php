@@ -17,8 +17,16 @@ trait HasSlug
     {
         return [
             'slug' => [
-                'source' => property_exists($this, 'slug_column') ? $this->slug_column : 'title'
+                'source' => $this->getSlugColumn()
             ]
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlugColumn(): string
+    {
+        return defined(static::class . '::SLUG_SOURCE') ? static::SLUG_SOURCE : 'title';
     }
 }
