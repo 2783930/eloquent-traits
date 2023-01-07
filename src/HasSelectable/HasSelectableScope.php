@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
-class SelectableScope implements Scope
+class HasSelectableScope implements Scope
 {
     protected array $extensions = ['OnlySelectable', 'OnlyNotSelectable'];
 

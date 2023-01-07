@@ -15,7 +15,7 @@ trait HasEnableFlag
      */
     public static function bootHasEnableFlag(): void
     {
-        static::addGlobalScope(new EnableScope);
+        static::addGlobalScope(new HasEnableScope);
     }
 
     /**

@@ -15,7 +15,7 @@ trait HasCurrentFlag
      */
     public static function bootHasCurrentFlag(): void
     {
-        //
+        static::addGlobalScope(new HasCurrentScope);
     }
 
     /**

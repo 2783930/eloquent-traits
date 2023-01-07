@@ -1,14 +1,14 @@
 <?php
 
-namespace EloquentTraits\HasEnable;
+namespace EloquentTraits\HasFirst;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
-class EnableScope implements Scope
+class HasFirstScope implements Scope
 {
-    protected array $extensions = ['OnlyEnabled', 'OnlyDisabled'];
+    protected array $extensions = ['OnlyFirst', 'OnlyNotFirst'];
 
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -37,10 +37,10 @@ class EnableScope implements Scope
      * @param Builder $builder
      * @return void
      */
-    protected function addOnlyEnabled(Builder $builder): void
+    protected function addOnlyFirst(Builder $builder): void
     {
-        $builder->macro('onlyEnabled', function (Builder $builder) {
-            return $builder->where($builder->getModel()->getQualifiedIsEnableColumn(), true);
+        $builder->macro('onlyFirst', function (Builder $builder) {
+            return $builder->where($builder->getModel()->getQualifiedIsFirstColumn(), true);
         });
     }
 
@@ -48,10 +48,10 @@ class EnableScope implements Scope
      * @param Builder $builder
      * @return void
      */
-    protected function addOnlyDisabled(Builder $builder): void
+    protected function addOnlyNotFirst(Builder $builder): void
     {
-        $builder->macro('onlyDisabled', function (Builder $builder) {
-            return $builder->where($builder->getModel()->getQualifiedIsEnableColumn(), false);
+        $builder->macro('onlyNotFirst', function (Builder $builder) {
+            return $builder->where($builder->getModel()->getQualifiedIsFirstColumn(), false);
         });
     }
 }

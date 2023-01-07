@@ -15,7 +15,7 @@ trait HasSelectableColumn
      */
     public static function bootHasSelectableColumn(): void
     {
-        static::addGlobalScope(new SelectableScope);
+        static::addGlobalScope(new HasSelectableScope);
     }
 
     /**

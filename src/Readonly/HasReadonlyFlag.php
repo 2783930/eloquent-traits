@@ -12,7 +12,7 @@ trait HasReadonlyFlag
 {
     public static function bootHasReadonlyFlag(): void
     {
-        static::addGlobalScope(ReadOnlyScope::class);
+        static::addGlobalScope(HasReadonlyScope::class);
     }
 
     public function initializeHasReadonlyFlag(): void

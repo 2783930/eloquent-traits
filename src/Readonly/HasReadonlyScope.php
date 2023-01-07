@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
-class ReadOnlyScope implements Scope
+class HasReadonlyScope implements Scope
 {
     protected array $extensions = ['OnlyReadonly', 'OnlyNotReadonly'];
 
