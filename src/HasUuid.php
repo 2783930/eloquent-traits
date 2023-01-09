@@ -15,8 +15,8 @@ trait HasUuid
     public static function bootHasUuid(): void
     {
         static::saving(function ($model) {
-            if (empty($model->{$this->getUuidColumn()})) {
-                $model->{$this->getUuidColumn()} = Str::uuid();
+            if (empty($model->{$model->getUuidColumn()})) {
+                $model->{$model->getUuidColumn()} = Str::uuid();
             }
         });
     }
