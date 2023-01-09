@@ -5,6 +5,7 @@ namespace EloquentTraits\HasFirst;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Model
  * @method static Builder|\Illuminate\Database\Query\Builder onlyFirst()
  * @method static Builder|\Illuminate\Database\Query\Builder onlyNotFirst()
  */

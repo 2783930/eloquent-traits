@@ -4,6 +4,11 @@ namespace EloquentTraits;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ * @property array $quickFilterColumns
+ * @property array $filters
+ */
 trait HasQuickFilter
 {
     /**
@@ -14,8 +19,8 @@ trait HasQuickFilter
     public function scopeApplyQuickFilter(Builder $builder, $keyword): Builder
     {
         return $builder->where(function (Builder $builder) use ($keyword) {
-            if (property_exists($this, 'quick_filter_columns')) {
-                foreach ($this->quick_filter_columns as $column) {
+            if (property_exists($this, 'quickFilterColumns')) {
+                foreach ($this->quickFilterColumns as $column) {
                     $builder->orWhere($column, 'like', "%{$keyword}%");
                 }
             }

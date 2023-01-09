@@ -5,7 +5,7 @@ namespace EloquentTraits;
 use Illuminate\Support\Str;
 
 /**
- * @const $UUID
+ * @mixin \Illuminate\Database\Eloquent\Model
  */
 trait HasUuid
 {

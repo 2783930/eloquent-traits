@@ -2,6 +2,9 @@
 
 namespace EloquentTraits;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait HasPersianCharacters
 {
     /**

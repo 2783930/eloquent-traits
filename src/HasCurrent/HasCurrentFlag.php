@@ -5,6 +5,7 @@ namespace EloquentTraits\HasCurrent;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Model
  * @method static Builder|\Illuminate\Database\Query\Builder onlyCurrent()
  * @method static Builder|\Illuminate\Database\Query\Builder onlyNotCurrent()
  */

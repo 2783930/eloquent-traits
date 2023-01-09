@@ -4,6 +4,9 @@ namespace EloquentTraits;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait HasSlug
 {
     use Sluggable;

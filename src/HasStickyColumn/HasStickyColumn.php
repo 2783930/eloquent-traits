@@ -5,6 +5,7 @@ namespace EloquentTraits\HasStickyColumn;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Model
  * @method static Builder|\Illuminate\Database\Query\Builder orderBySticky(string|false $direction = 'desc')
  * @method static Builder|\Illuminate\Database\Query\Builder withoutSticky()
  * @method static Builder|\Illuminate\Database\Query\Builder onlySticky()

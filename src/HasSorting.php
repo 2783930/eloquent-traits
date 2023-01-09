@@ -4,21 +4,24 @@ namespace EloquentTraits;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ */
 trait HasSorting
 {
     /**
      * @param Builder $builder
-     * @param         $sort_field
-     * @param         $sort_order
+     * @param         $sortField
+     * @param         $sortOrder
      * @return Builder
      */
-    public function scopeApplySort(Builder $builder, $sort_field, $sort_order): Builder
+    public function scopeApplySort(Builder $builder, $sortField, $sortOrder): Builder
     {
-        if ($sort_order == "desc") {
-            return $builder->orderByDesc($sort_field);
+        if ($sortOrder == "desc") {
+            return $builder->orderByDesc($sortField);
         }
-        if ($sort_order == "asc") {
-            return $builder->orderBy($sort_field);
+        if ($sortOrder == "asc") {
+            return $builder->orderBy($sortOrder);
         }
 
         return $builder;

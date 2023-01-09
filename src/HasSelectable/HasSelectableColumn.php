@@ -5,6 +5,7 @@ namespace EloquentTraits\HasSelectable;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Model
  * @method static Builder|\Illuminate\Database\Query\Builder onlySelectable()
  * @method static Builder|\Illuminate\Database\Query\Builder onlyNotSelectable()
  */
@@ -23,12 +24,12 @@ trait HasSelectableColumn
      */
     public function initializeHasSelectableColumn(): void
     {
-        if (!isset($this->casts[$this->getIsEnableColumn()])) {
-            $this->casts[$this->getIsEnableColumn()] = 'boolean';
+        if (!isset($this->casts[$this->getIsSelectableColumn()])) {
+            $this->casts[$this->getIsSelectableColumn()] = 'boolean';
         }
 
-        if (!isset($this->fillable[$this->getIsEnableColumn()])) {
-            $this->fillable[] = $this->getIsEnableColumn();
+        if (!isset($this->fillable[$this->getIsSelectableColumn()])) {
+            $this->fillable[] = $this->getIsSelectableColumn();
         }
     }
 

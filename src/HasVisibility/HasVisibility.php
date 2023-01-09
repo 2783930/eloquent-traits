@@ -5,6 +5,7 @@ namespace EloquentTraits\HasVisibility;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
+ * @mixin \Illuminate\Database\Eloquent\Model
  * @method static Builder|\Illuminate\Database\Query\Builder onlyVisible()
  * @method static Builder|\Illuminate\Database\Query\Builder onlyHidden()
  */
