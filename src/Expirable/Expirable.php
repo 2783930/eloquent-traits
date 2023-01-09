@@ -56,7 +56,11 @@ trait Expirable
      */
     public function expired(): bool
     {
-        return $this->{$this->getExpiredAtColumn()}?->isPast();
+        $expiredAt = $this->{$this->getExpiredAtColumn()};
+        if ($expiredAt instanceof Carbon) {
+            return $expiredAt->isPast();
+        }
+        return false;
     }
 
     /**

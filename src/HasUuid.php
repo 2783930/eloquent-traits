@@ -4,6 +4,9 @@ namespace EloquentTraits;
 
 use Illuminate\Support\Str;
 
+/**
+ * @const $UUID
+ */
 trait HasUuid
 {
     /**
