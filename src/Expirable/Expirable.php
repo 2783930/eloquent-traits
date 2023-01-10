@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @mixin \Illuminate\Database\Eloquent\Model
  * @method static Builder|\Illuminate\Database\Query\Builder withExpired(bool $withExpired = true)
  * @method static Builder|\Illuminate\Database\Query\Builder onlyExpired()
+ * @method static int expire()
  */
 trait Expirable
 {
