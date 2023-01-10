@@ -86,6 +86,6 @@ trait Expirable
      */
     public function getIsExpiredAttribute(): bool
     {
-        return $this->{$this->getExpiredAtColumn()}?->isPast();
+        return $this->expired();
     }
 }
