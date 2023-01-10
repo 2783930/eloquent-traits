@@ -18,18 +18,22 @@ trait HasQuickFilter
      */
     public function scopeApplyQuickFilter(Builder $builder, $keyword): Builder
     {
-        return $builder->where(function (Builder $builder) use ($keyword) {
-            if (property_exists($this, 'quickFilterColumns')) {
-                foreach ($this->quickFilterColumns as $column) {
-                    $builder->orWhere($column, 'like', "%{$keyword}%");
+        if (!empty($keyword)) {
+            return $builder->where(function (Builder $builder) use ($keyword) {
+                if (property_exists($this, 'quickFilterColumns')) {
+                    foreach ($this->quickFilterColumns as $column) {
+                        $builder->orWhere($column, 'like', "%{$keyword}%");
+                    }
                 }
-            }
 
-            if (property_exists($this, 'filters')) {
-                foreach ($this->filters as $column => $operand) {
-                    $builder->orWhere($column, $operand, $keyword);
+                if (property_exists($this, 'filters')) {
+                    foreach ($this->filters as $column => $operand) {
+                        $builder->orWhere($column, $operand, $keyword);
+                    }
                 }
-            }
-        });
+            });
+        }
+
+        return $builder;
     }
 }
