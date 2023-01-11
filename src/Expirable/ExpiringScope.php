@@ -41,15 +41,18 @@ class ExpiringScope implements Scope
     /**
      * @param Builder $builder
      * @return void
+     * @noinspection PhpUndefinedMethodInspection
      */
     protected function addWithExpired(Builder $builder): void
     {
         $builder->macro('withExpired', function (Builder $builder, $withExpired = true) {
-            if (!$withExpired) {
-                return $builder->withoutExpired();
+            if ($withExpired) {
+                return $builder->withoutGlobalScope($this);
             }
 
-            return $builder->withoutGlobalScope($this);
+            return $builder
+                ->whereNull($builder->getModel()->getQualifiedExpiredAtColumn())
+                ->orWhere($builder->getModel()->getQualifiedExpiredAtColumn(), '>', Carbon::now());
         });
     }
 
