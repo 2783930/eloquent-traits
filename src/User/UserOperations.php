@@ -19,11 +19,14 @@ trait UserOperations
     |--------------------------------------------------------------------------
     */
 
-    public function setUserPassword($password): static
+    public function setUserPassword($password = null): static
     {
-        $this->password = Hash::make(
-            $password . $this->id
-        );
+        if (!empty($password)) {
+            $this->password = Hash::make(
+                $password . $this->id
+            );
+        }
+
         return $this;
     }
 
@@ -35,11 +38,14 @@ trait UserOperations
         );
     }
 
-    public function setUserSecondPassword($password): static
+    public function setUserSecondPassword($password = null): static
     {
-        $this->second_password = Hash::make(
-            $password . $this->id . str($this->secondPasswordSuffix)->reverse()
-        );
+        if (!empty($password)) {
+            $this->second_password = Hash::make(
+                $password . $this->id . str($this->secondPasswordSuffix)->reverse()
+            );
+        }
+
         return $this;
     }
 
