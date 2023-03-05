@@ -21,7 +21,7 @@ trait HasSorting
             return $builder->orderByDesc($sortField);
         }
         if ($sortOrder == "asc") {
-            return $builder->orderBy($sortOrder);
+            return $builder->orderBy($sortField);
         }
 
         return $builder;
