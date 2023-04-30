@@ -38,7 +38,7 @@ trait HasDefaultFlag
      */
     public function getIsDefaultColumn(): string
     {
-        return defined(static::class . '::IS_DEFAULT') ? static::IS_DEFAULT : 'is_defaul';
+        return defined(static::class . '::IS_DEFAULT') ? static::IS_DEFAULT : 'is_default';
     }
 
     /**
