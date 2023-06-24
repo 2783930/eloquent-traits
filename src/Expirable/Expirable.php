@@ -4,6 +4,8 @@ namespace EloquentTraits\Expirable;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Model
@@ -51,6 +53,29 @@ trait Expirable
     {
         $this->{$this->getExpiredAtColumn()} = null;
         return $this;
+    }
+
+    /**
+     * @param bool $response
+     * @return \Illuminate\Http\JsonResponse|bool
+     */
+    public function destroyOrExpire(bool $response = true): JsonResponse|bool
+    {
+        try {
+
+            $this->forceDelete();
+            return $response ?
+                response()->json(['message' => trans('eloquent-traits::messages.delete_success')]) :
+                true;
+
+        } catch (Exception) {
+
+            $this->markAsExpired();
+            return $response ?
+                response()->json(['message' => trans('eloquent-traits::messages.delete_expired')]) :
+                false;
+
+        }
     }
 
     /**
