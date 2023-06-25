@@ -57,13 +57,15 @@ trait Expirable
 
     /**
      * @param bool $response
+     * @param callable($deleted): void|null $callback
      * @return \Illuminate\Http\JsonResponse|bool
      */
-    public function destroyOrExpire(bool $response = true): JsonResponse|bool
+    public function destroyOrExpire(bool $response = true, callable $callback = null): JsonResponse|bool
     {
         try {
 
             $this->forceDelete();
+            $callback(true);
             return $response ?
                 response()->json(['message' => trans('eloquent-traits::messages.delete_success')]) :
                 true;
@@ -71,6 +73,7 @@ trait Expirable
         } catch (Exception) {
 
             $this->markAsExpired();
+            $callback(false);
             return $response ?
                 response()->json(['message' => trans('eloquent-traits::messages.delete_expired')]) :
                 false;
