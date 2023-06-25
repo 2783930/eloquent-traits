@@ -65,7 +65,10 @@ trait Expirable
         try {
 
             $this->forceDelete();
-            $callback(true);
+            if (is_callable($callback)) {
+                $callback(true);
+            }
+
             return $response ?
                 response()->json(['message' => trans('eloquent-traits::messages.delete_success')]) :
                 true;
@@ -73,7 +76,10 @@ trait Expirable
         } catch (Exception) {
 
             $this->markAsExpired();
-            $callback(false);
+            if (is_callable($callback)) {
+                $callback(true);
+            }
+
             return $response ?
                 response()->json(['message' => trans('eloquent-traits::messages.delete_expired')]) :
                 false;
