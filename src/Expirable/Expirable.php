@@ -75,7 +75,7 @@ trait Expirable
 
         } catch (Exception) {
 
-            $this->markAsExpired();
+            $this->markAsExpired()->save();
             if (is_callable($callback)) {
                 $callback(true);
             }
