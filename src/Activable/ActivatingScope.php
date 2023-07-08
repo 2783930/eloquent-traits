@@ -52,14 +52,16 @@ class ActivatingScope implements Scope
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $builder
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return void
      */
-    protected function addOnlyDeactivated(Builder $builder): Builder
+    protected function addOnlyDeactivated(Builder $builder): void
     {
-        return $builder->where(
-            $builder->getModel()->getQualifiedIsActiveColumn(),
-            false
-        );
+        $builder->macro('onlyDeactivated', function(Builder $builder){
+            return $builder->where(
+                $builder->getModel()->getQualifiedIsActiveColumn(),
+                false
+            );
+        });
     }
 
 }
